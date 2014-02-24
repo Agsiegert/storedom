@@ -1,5 +1,10 @@
 class ItemsController < ApplicationController
   def index
-    @items = Item.all
+    if params[:show_inactive] == "true"
+      @items = Item.all
+    else
+      @items = Item.active
+    end
   end
+
 end

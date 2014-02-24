@@ -15,4 +15,20 @@ class DisplaysItemsTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_only_active_items_display
+    item1 = Item.create(name: "item1", active: true)
+    item2 = Item.create(name: "item2", active: false)
+    visit '/'
+    assert page.has_content? "item1"
+    refute page.has_content?("item2"), "page should not have item2\n#{page.body}"
+  end
+
+  def test_user_adds_show_inactive_displays_all_items
+    item1 = Item.create(name: "item1", active: true)
+    item2 = Item.create(name: "item2", active: false)
+    visit '/items?show_inactive=true'
+    assert page.has_content? "item1"
+    assert page.has_content?("item2"), "page should have item2\n#{page.body}"
+  end
+
 end
